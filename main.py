@@ -72,7 +72,7 @@ class DeliverySystem:
         print("Entregas Pendentes:")
         for delivery in self.deliveries:
             status = "Pendente" if delivery["motoboy"] is None else f"Atribuída a {delivery['motoboy']['name']}"
-            print(f"Entrega {delivery['number']} - {status} - Endereço: {delivery['address']} - Cliente: {delivery['customer_phone']}")
+            print(f"Entrega {delivery['number']} - {status} - Endereço: {delivery['address']} - Telefone do cliente: {delivery['customer_phone']}")
 
     def send_message(self):
         motoboy_name = input("Nome do Motoboy: ")
