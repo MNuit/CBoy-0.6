@@ -1,2 +1,2 @@
-# PyBoy
+# CBoy
 Projeto de programação
