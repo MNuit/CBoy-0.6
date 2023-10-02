@@ -130,7 +130,7 @@ void listarEntregas(Entrega entregas[], int numEntregas, Funcionario funcionario
 void enviarMensagem(Mensagem mensagens[], int *numMensagens, Funcionario funcionarios[], int numFuncionarios, Cliente clientes[], int numClientes) {
     Mensagem novaMensagem;
     int opcaoDestinatario;
-    int encontrado = 0;
+    int encontrado = 1;
 
     printf("Escolha o destinatário:\n");
     printf("1. Funcionário (usando ID)\n");
