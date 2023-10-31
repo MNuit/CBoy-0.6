@@ -190,6 +190,76 @@ void listarMensagens(Mensagem mensagens[], int numMensagens) {
     }
 }
 
+void salvarDados(Funcionario funcionarios[], int numFuncionarios, Cliente clientes[], int numClientes, Entrega entregas[], int numEntregas, Mensagem mensagens[], int numMensagens) {
+    FILE *file = fopen("dados.txt", "w");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+
+    // Salvar funcionários
+    fprintf(file, "Funcionarios %d\n", numFuncionarios);
+    for (int i = 0; i < numFuncionarios; i++) {
+        fprintf(file, "%d %s\n", funcionarios[i].id, funcionarios[i].nome);
+    }
+
+    // Salvar clientes
+    fprintf(file, "Clientes %d\n", numClientes);
+    for (int i = 0; i < numClientes; i++) {
+        fprintf(file, "%s %s %s\n", clientes[i].cpf, clientes[i].nome, clientes[i].endereco);
+    }
+
+    // Salvar entregas
+    fprintf(file, "Entregas %d\n", numEntregas);
+    for (int i = 0; i < numEntregas; i++) {
+        fprintf(file, "%d %s %d\n", entregas[i].idFuncionario, entregas[i].cpfCliente, entregas[i].concluida);
+    }
+
+    // Salvar mensagens
+    fprintf(file, "Mensagens %d\n", numMensagens);
+    for (int i = 0; i < numMensagens; i++) {
+        fprintf(file, "%s %s %s\n", mensagens[i].remetente, mensagens[i].destinatario, mensagens[i].mensagem);
+    }
+
+    fclose(file);
+    printf("Dados salvos com sucesso.\n");
+}
+
+void carregarDados(Funcionario funcionarios[], int *numFuncionarios, Cliente clientes[], int *numClientes, Entrega entregas[], int *numEntregas, Mensagem mensagens[], int *numMensagens) {
+    FILE *file = fopen("dados.txt", "r");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+
+    // Carregar funcionários
+    fscanf(file, "Funcionarios %d\n", numFuncionarios);
+    for (int i = 0; i < *numFuncionarios; i++) {
+        fscanf(file, "%d %s\n", &funcionarios[i].id, funcionarios[i].nome);
+    }
+
+    // Carregar clientes
+    fscanf(file, "Clientes %d\n", numClientes);
+    for (int i = 0; i < *numClientes; i++) {
+        fscanf(file, "%s %s %s\n", clientes[i].cpf, clientes[i].nome, clientes[i].endereco);
+    }
+
+    // Carregar entregas
+    fscanf(file, "Entregas %d\n", numEntregas);
+    for (int i = 0; i < *numEntregas; i++) {
+        fscanf(file, "%d %s %d\n", &entregas[i].idFuncionario, entregas[i].cpfCliente, &entregas[i].concluida);
+    }
+
+    // Carregar mensagens
+    fscanf(file, "Mensagens %d\n", numMensagens);
+    for (int i = 0; i < *numMensagens; i++) {
+        fscanf(file, "%s %s %s\n", mensagens[i].remetente, mensagens[i].destinatario, mensagens[i].mensagem);
+    }
+
+    fclose(file);
+    printf("Dados carregados com sucesso.\n");
+}
+
 int main() {
     Funcionario funcionarios[100];
     Cliente clientes[100];
@@ -202,6 +272,10 @@ int main() {
     int opcao;
     int idEntrega;
 
+    carregarDados(funcionarios, &numFuncionarios, clientes, &numClientes, entregas, &numEntregas, mensagens, &numMensagens);
+
+    // ... (O resto do seu código main aqui)
+
     do {
         printf("\n*** Menu Principal ***\n");
         printf("1. Funcionários\n");
@@ -209,97 +283,108 @@ int main() {
         printf("3. Entregas\n");
         printf("4. Comunicações\n");
         printf("5. Fechar o programa\n");
+        printf("6. Salvar dados\n");
+        printf("7. Carregar dados\n");
         printf("Escolha uma opção: ");
         scanf("%d", &opcao);
 
         switch (opcao) {
-            case 1:
-                printf("\n*** Menu de Funcionários ***\n");
-                printf("1. Adicionar Funcionário\n");
-                printf("2. Listar Funcionários\n");
-                printf("3. Voltar ao Menu Principal\n");
-                printf("Escolha uma opção: ");
-                scanf("%d", &opcao);
-                switch (opcao) {
-                    case 1:
-                        adicionarFuncionario(funcionarios, &numFuncionarios);
-                        break;
-                    case 2:
-                        listarFuncionarios(funcionarios, numFuncionarios);
-                        break;
-                }
+          case 1:
+              printf("\n*** Menu de Funcionários ***\n");
+              printf("1. Adicionar Funcionário\n");
+              printf("2. Listar Funcionários\n");
+              printf("3. Voltar ao Menu Principal\n");
+              printf("Escolha uma opção: ");
+              scanf("%d", &opcao);
+              switch (opcao) {
+                  case 1:
+                      adicionarFuncionario(funcionarios, &numFuncionarios);
+                      break;
+                  case 2:
+                      listarFuncionarios(funcionarios, numFuncionarios);
+                      break;
+              }
+              break;
+
+          case 2:
+              printf("\n*** Menu de Clientes ***\n");
+              printf("1. Adicionar Cliente\n");
+              printf("2. Listar Clientes\n");
+              printf("3. Voltar ao Menu Principal\n");
+              printf("Escolha uma opção: ");
+              scanf("%d", &opcao);
+              switch (opcao) {
+                  case 1:
+                      adicionarCliente(clientes, &numClientes);
+                      break;
+                  case 2:
+                      listarClientes(clientes, numClientes);
+                      break;
+              }
+              break;
+
+          case 3:
+              printf("\n*** Menu de Entregas ***\n");
+              printf("1. Adicionar Entrega\n");
+              printf("2. Listar Entregas em Andamento\n");
+              printf("3. Marcar Entrega como Concluída\n");
+              printf("4. Voltar ao Menu Principal\n");
+              printf("Escolha uma opção: ");
+              scanf("%d", &opcao);
+              switch (opcao) {
+                  case 1:
+                      adicionarEntrega(entregas, &numEntregas, funcionarios, numFuncionarios, clientes, numClientes);
+                      break;
+                  case 2:
+                      listarEntregas(entregas, numEntregas, funcionarios, numFuncionarios, clientes, numClientes);
+                      break;
+                  case 3:
+                      printf("Digite o ID da entrega a ser marcada como concluída: ");
+                      scanf("%d", &idEntrega);
+                      for (int i = 0; i < numEntregas; i++) {
+                          if (entregas[i].idFuncionario == idEntrega) {
+                              entregas[i].concluida = 1;
+                              printf("Entrega marcada como concluída.\n");
+                              break;
+                          }
+                      }
+                      break;
+              }
+              break;
+
+          case 4:
+              printf("\n*** Menu de Comunicações ***\n");
+              printf("1. Enviar Mensagem\n");
+              printf("2. Listar Mensagens\n");
+              printf("3. Voltar ao Menu Principal\n");
+              printf("Escolha uma opção: ");
+              scanf("%d", &opcao);
+              switch (opcao) {
+                  case 1:
+                      enviarMensagem(mensagens, &numMensagens, funcionarios, numFuncionarios, clientes, numClientes);
+                      break;
+                  case 2:
+                      listarMensagens(mensagens, numMensagens);
+                      break;
+              }
+              break;
+
+          case 5:
+              printf("Programa encerrado.\n");
+              break;
+
+            case 6:
+                salvarDados(funcionarios, numFuncionarios, clientes, numClientes, entregas, numEntregas, mensagens, numMensagens);
                 break;
 
-            case 2:
-                printf("\n*** Menu de Clientes ***\n");
-                printf("1. Adicionar Cliente\n");
-                printf("2. Listar Clientes\n");
-                printf("3. Voltar ao Menu Principal\n");
-                printf("Escolha uma opção: ");
-                scanf("%d", &opcao);
-                switch (opcao) {
-                    case 1:
-                        adicionarCliente(clientes, &numClientes);
-                        break;
-                    case 2:
-                        listarClientes(clientes, numClientes);
-                        break;
-                }
-                break;
-
-            case 3:
-                printf("\n*** Menu de Entregas ***\n");
-                printf("1. Adicionar Entrega\n");
-                printf("2. Listar Entregas em Andamento\n");
-                printf("3. Marcar Entrega como Concluída\n");
-                printf("4. Voltar ao Menu Principal\n");
-                printf("Escolha uma opção: ");
-                scanf("%d", &opcao);
-                switch (opcao) {
-                    case 1:
-                        adicionarEntrega(entregas, &numEntregas, funcionarios, numFuncionarios, clientes, numClientes);
-                        break;
-                    case 2:
-                        listarEntregas(entregas, numEntregas, funcionarios, numFuncionarios, clientes, numClientes);
-                        break;
-                    case 3:
-                        printf("Digite o ID da entrega a ser marcada como concluída: ");
-                        scanf("%d", &idEntrega);
-                        for (int i = 0; i < numEntregas; i++) {
-                            if (entregas[i].idFuncionario == idEntrega) {
-                                entregas[i].concluida = 1;
-                                printf("Entrega marcada como concluída.\n");
-                                break;
-                            }
-                        }
-                        break;
-                }
-                break;
-
-            case 4:
-                printf("\n*** Menu de Comunicações ***\n");
-                printf("1. Enviar Mensagem\n");
-                printf("2. Listar Mensagens\n");
-                printf("3. Voltar ao Menu Principal\n");
-                printf("Escolha uma opção: ");
-                scanf("%d", &opcao);
-                switch (opcao) {
-                    case 1:
-                        enviarMensagem(mensagens, &numMensagens, funcionarios, numFuncionarios, clientes, numClientes);
-                        break;
-                    case 2:
-                        listarMensagens(mensagens, numMensagens);
-                        break;
-                }
-                break;
-
-            case 5:
-                printf("Programa encerrado.\n");
+            case 7:
+                carregarDados(funcionarios, &numFuncionarios, clientes, &numClientes, entregas, &numEntregas, mensagens, &numMensagens);
                 break;
 
             default:
                 printf("Opção inválida. Tente novamente.\n");
         }
+
     } while (opcao != 5);
 
     return 0;
